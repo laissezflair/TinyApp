@@ -24,14 +24,12 @@ app.get("/", (req, res) => {
 
 // Render the links table
 app.get("/urls" , (req, res) => {
-  console.log("Brett is Awesome");
-  let templateVars = {urls: urlDatabase};
+  let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id };
-  console.log("All work and no play");
   res.render("urls_show", templateVars);
 });
 
@@ -40,10 +38,18 @@ app.get("/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.post("/urls", (req, res) => {
+// The following route handles shortURL requests
+app.get("/urls/:shortURL", (req, res) => {
+  let longURL = { longURL: urlDatabase };
+  res.redirect(longURL);
+});
+
+
+app.post("/urls/create", (req, res) => {
   urlDatabase[generateRandomString()] = req.body.longURL;
+  const shortURL = generateRandomString();
   console.log(urlDatabase);  // debug statement to see POST parameters
-  res.redirect("/urls")         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/" + shortURL);
 });
 
 
