@@ -9,11 +9,10 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: false}));
 
 
-let linktable = [
-    { name: 'Google', address: 'http://www.google.com'},
-    { name: 'Alta Vista', address: 'http://www.altavista.com'},
-    { name: 'Hooli', address: 'http://www.hooli.xyz'}
-];
+let urlDatabase = {
+  "b2xVn2": "http://www.lighthouselabs.ca",
+  "9sm5xK": "http://www.google.com"
+};
 
 // set the VIEW ENGINE to EJS for our Express application
 app.set("view engine", "ejs");
@@ -25,36 +24,40 @@ app.get("/", (req, res) => {
 
 // Render the links table
 app.get("/urls" , (req, res) => {
-  let templateVars = { linktable: linktable };
+  console.log("Brett is Awesome");
+  let templateVars = {urls: urlDatabase};
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id };
+  console.log("All work and no play");
   res.render("urls_show", templateVars);
 });
 
 // Express routes requests based not only on PATHS, but also on request METHOD (see the urls_new template!)
-app.get("/urls/new", (req, res) => {
+app.get("/new", (req, res) => {
   res.render("urls_new");
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  urlDatabase[generateRandomString()] = req.body.longURL;
+  console.log(urlDatabase);  // debug statement to see POST parameters
+  res.redirect("/urls")         // Respond with 'Ok' (we will replace this)
 });
 
-// render the links table
-app.get('/urls_index', function(req, res){
 
 
-    let urlShort = "Here we will define the URL Shortener";
+// Random string-generatng function
+function generateRandomString() {
+  let text = "";
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(let i=0; i < 6; i++){
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+    return text;
+}
 
-    res.render('urls_index', {
-      linktable: linktable,
-      urlShort: urlShort
-    });
-});
 
 // listen on port 8080
 app.listen(8080);

@@ -2,12 +2,15 @@
 <html lang="en">
 <body>
 <h2>Links</h2>
+
+<a href="/new"> PLEASE CREATE ME MUAH </a>
 <ul>
-    <% linktable.forEach(function(linktable) { %>
-        <li><%= linktable.name %> - <%= linktable.address %></li>
-    <% }); %>
+  <% for(url in urls) { %>
+      <li><%= url %>: <a href="/urls/<%= url %>"> <%= urls[url] %> </a></li>
+  <% }; %>
 </ul>
 <br>
-    Here are some words and things that I am writing <br/>
+    Here are some words and things that I am
+<br/>
 </body>
 </html>
